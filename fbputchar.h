@@ -11,4 +11,8 @@ extern int fbopen(void);
 extern void fbputchar(char, int, int);
 extern void fbputs(const char *, int, int);
 
+extern void fbclear(void);
+extern void fbdraw_hline(int row, char ch);
+extern void fbdraw_cursor(int row, int col);
+
 #endif
