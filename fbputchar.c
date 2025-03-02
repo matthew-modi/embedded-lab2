@@ -248,3 +248,45 @@ static unsigned char font[] = {
     0x00, 0x00, 0x76, 0xdc, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x66, 0x00, 0x66, 0x66, 0x66, 0x66, 0x3c, 0x18, 0x18, 0x18, 0x3c, 0x00, 0x00, 0x00, 0x00,
 };
+
+/*
+ * Clear the entire framebuffer (set all pixels to black)
+ *
+ */
+void fbclear(void) 
+{
+    memset(framebuffer, 0, fb_finfo.smem_len);
+}
+
+/*
+ * Draw a horizontal line across the screen at the given row
+ * The screen width in characters is calculated from the x-resolution
+ */
+void fbdraw_hline(int row, char ch) 
+{
+    int maxCols = fb_vinfo.xres / (FONT_WIDTH * 2);
+    for (int col = 0; col < maxCols; i++) {
+        fbputchar(ch, row, col);
+    }    
+}
+
+/* Draw a simple cursor at the given text row and column
+ * This draws an underline, filling the last two pixel rows of the cell
+ */
+void fbdraw_cursor(int row, int col) 
+{
+    int x, y;
+    unsigned char *base = framebuffer +
+        ((row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length) +
+        ((col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * (BITS_PER_PIXEL / 8));
+
+    for (y = FONT_HEIGHT * 2 - 2; y < FONT_HEIGHT * 2; y++) {
+        unsigned char *p = base + y * fb_finfo.line_length;
+        for (x = 0; x < FONT_WIDTH * 2; x++) {
+            p[x * 4 + 0] = 255;  /* Red */
+            p[x * 4 + 1] = 255;  /* Green */
+            p[x * 4 + 2] = 255;  /* Blue */
+            p[x * 4 + 3] = 0;
+        }
+    }
+}
