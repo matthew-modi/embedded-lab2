@@ -2,7 +2,10 @@
  *
  * CSEE 4840 Lab 2 for 2019
  *
- * Name/UNI: Please Changeto Yourname (pcy2301)
+ * Name/UNI:
+ *      Matthew Modi (mem2382)
+ *      Kamil Zajkowski (kmz2123)
+ *      Rahul Pulidini (rp3254)
  */
 #include "fbputchar.h"
 #include <stdio.h>
