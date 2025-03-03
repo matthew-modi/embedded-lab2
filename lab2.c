@@ -58,6 +58,15 @@ int main()
         exit(1);
     }
 
+    /* Clear the entire screen and setup the display layout
+     * We clear the entire screen, then draw a horizontal separator
+     * at rows 21 so that rows 21-23 can serve as the input region
+     * Finally, we display a cursor in the input region
+    */
+    fbclear();                // Clear the entire screen
+    fbdraw_hline(21, '-');    // Draw horizontal seperator at row 21
+    fbdraw_cursor(22, 0);     // Display a cursor in the input region (row 22, col 0)
+
     /* Draw rows of asterisks across the top and bottom of the screen */
     for (col = 0 ; col < 64 ; col++) {
         fbputchar('*', 0, col);
