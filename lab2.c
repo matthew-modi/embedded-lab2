@@ -27,7 +27,7 @@
 #define BUFFER_SIZE 128
 
 #define RECEIVE_START 8
-#define RECEIVE_END 21
+#define RECEIVE_END 19
 #define MAX_COLS 64
 int receive_row = RECEIVE_START;
 
@@ -151,24 +151,29 @@ void *network_thread_f(void *ignored)
     return NULL;
 }
 
-void print_receive(const char *msg) {
-  int len = strlen(msg);
-  int pos = 0;
-  char line[256];
-  
-  while (pos < len) {
-    int chunk = (len - pos > MAX_COLS ? MAX_COLS : len - pos);
-    strncpy(line, msg + pos, chunk);
-    line[chunk] = '\0';
-    
-    if (receive_row >= RECEIVE_END) {
-      receive_row = RECEIVE_START;
-    }
 
-    fbputs(line, receive_row, 0);
-    receive_row++;
-    
-    pos += chunk;
-  }
+void print_receive(const char *msg)
+{
+	int len = strlen(msg);
+	int pos = 0;
+	char line[256];
+
+	while (pos < len) {
+		int chunk = (len - pos > MAX_COLS ? MAX_COLS : len - pos);
+		strncpy(line, msg + pos, chunk);
+		line[chunk] = '\0';
+
+
+
+
+if (receive_row >= RECEIVE_END) {
+			receive_row = RECEIVE_START;
+		}
+
+		fbputs(line, receive_row, 0);
+		receive_row++;
+
+		pos += chunk;
+	}
 }
 
