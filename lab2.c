@@ -26,6 +26,11 @@
 
 #define BUFFER_SIZE 128
 
+#define RECEIVE_START 8
+#define RECEIVE_END 21
+#define MAX_COLS 64
+int receive_row = RECEIVE_START;
+
 /*
  * References:
  *
@@ -42,6 +47,7 @@ uint8_t endpoint_address;
 
 pthread_t network_thread;
 void *network_thread_f(void *);
+void print_receive(const char *msg);
 
 int main()
 {
@@ -64,8 +70,8 @@ int main()
      * Finally, we display a cursor in the input region
     */
     fbclear();                // Clear the entire screen
-    fbdraw_hline(21, '-');    // Draw horizontal seperator at row 21
-    fbdraw_cursor(22, 0);     // Display a cursor in the input region (row 22, col 0)
+    fbdraw_hline(20, '-');    // Draw horizontal seperator at row 21
+    fbdraw_cursor(21, 0);     // Display a cursor in the input region (row 22, col 0)
 
     /* Draw rows of asterisks across the top and bottom of the screen */
     for (col = 0 ; col < 64 ; col++) {
@@ -138,9 +144,31 @@ void *network_thread_f(void *ignored)
     while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
         recvBuf[n] = '\0';
         printf("%s", recvBuf);
-        fbputs(recvBuf, 8, 0);
+        // fbputs(recvBuf, 8, 0);
+    	print_receive(recvBuf);
     }
 
     return NULL;
+}
+
+void print_receive(const char *msg) {
+  int len = strlen(msg);
+  int pos = 0;
+  char line[256];
+  
+  while (pos < len) {
+    int chunk = (len - pos > MAX_COLS ? MAX_COLS : len - pos);
+    strncpy(line, msg + pos, chunk);
+    line[chunk] = '\0';
+    
+    if (receive_row >= RECEIVE_END) {
+      receive_row = RECEIVE_START;
+    }
+
+    fbputs(line, receive_row, 0);
+    receive_row++;
+    
+    pos += chunk;
+  }
 }
 
