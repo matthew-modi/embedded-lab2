@@ -132,7 +132,7 @@ int main(){
             sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
             printf("%s\n", keystate);
 
-            fbdraw_cursor(fbmaxrows() - 1 - INPUT_ROWS + (message_len / fbmaxcols()), message_len % fbmaxcols());
+            // fbdraw_cursor(fbmaxrows() - 1 - INPUT_ROWS + (message_len / fbmaxcols()), message_len % fbmaxcols());
 
             if (packet.keycode[0] == 40 || packet.keycode[1] == 40){ // Enter pressed
                 if (message_len != 0) {
