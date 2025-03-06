@@ -55,7 +55,6 @@ int main(){
 
     struct usb_keyboard_packet packet;
     int transferred;
-    char keystate[12];
 
     if ((err = fbopen()) != 0) {
         fprintf(stderr, "Error: Could not open framebuffer: %d\n", err);
@@ -115,13 +114,15 @@ int main(){
     int keycode = 0;
     char key = '';
 
+    char keystate[12];
+
     for (;;) {
         libusb_interrupt_transfer(keyboard, endpoint_address,
 			            (unsigned char *) &packet, sizeof(packet),
 			            &transferred, 0);
         if (transferred == sizeof(packet)) {
-            // sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
-            // printf("%s\n", keystate);
+            sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
+            printf("%s\n", keystate);
 
             if (packet.keycode[0] == 0x28 || packet.keycode[1] == 0x28){ // Enter pressed
                 if (message_idx != 0) {
@@ -152,9 +153,7 @@ int main(){
 
                     message_idx++;
                 }
-            } else {
-                message[message_idx] = '\n';
-                write(sockfd, keycode_str, strlen(keycode_str));
+            }
         }
     }
 
