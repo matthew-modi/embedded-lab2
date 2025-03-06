@@ -25,7 +25,7 @@
 #define SERVER_PORT 42000
 
 #define BUFFER_SIZE 128
-#define INPUT_ROWS 2
+#define INPUT_ROWS 5
 
 #define RECEIVE_START 2
 #define RECEIVE_END 20
@@ -120,6 +120,7 @@ int main(){
     int keycode = 0;
     char key = ' ';
     int shift = 0;
+    int keys[2];
 
     char keystate[12];
 
@@ -157,13 +158,19 @@ int main(){
                     message_len = 0;
                     cursor_idx = 0;
                 }
-            } else if (packet.keycode[0] == 0x00 || packet.keycode[1] == 0x00) { // Single character being pressed
+            } else { // Single character being pressed
                 if (message_len < MESSAGE_SIZE - 1) { // Still room in the text box
-                    if (packet.keycode[0] == 0x00) { // Single character at a time TODO make this work for double presses
+                    // From packet.keycode[0] and packet.keycode[1], determine the next keycode which was not already being pressed in the last set and store it in keycode. keys[0] and keys[1] store the last set of keycodes.
+                    if (packet.keycode[0] != keys[0] && packet.keycode[0] != keys[1]) {
+                        keycode = packet.keycode[0];
+                    } else if (packet.keycode[1] != keys[0] && packet.keycode[1] != keys[1]) {
                         keycode = packet.keycode[1];
                     } else {
-                        keycode = packet.keycode[0];
+                        keycode = 0;
                     }
+                    keys[0] = packet.keycode[0];
+                    keys[1] = packet.keycode[1];
+                    
 
                     if (keycode == 42) { // Backspace
                         if (cursor_idx > 0) {
