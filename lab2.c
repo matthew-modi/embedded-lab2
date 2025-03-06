@@ -174,7 +174,7 @@ int main(){
                                 fbputchar(message[i], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
                             }
                             message[message_len-1] = ' ';
-                            fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + (message_len-1 / fbmaxcols()), message_len-1 % fbmaxcols());
+                            fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + ((message_len-1) / fbmaxcols()), message_len-1 % fbmaxcols());
                             message_len--;
                         }
                     } else if (keycode == 76) { // Forward delete
