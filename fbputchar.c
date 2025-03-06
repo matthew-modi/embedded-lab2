@@ -32,7 +32,6 @@ struct fb_fix_screeninfo fb_finfo;
 unsigned char *framebuffer;
 static unsigned char font[];
 
-/* our code */
 void fbclear(void) {
     memset(framebuffer, 0, fb_finfo.smem_len);
 }
@@ -65,6 +64,7 @@ void fbdraw_cursor(int row, int col)
         }
     }
 }
+
 /*
  * Open the framebuffer to prepare it to be written to.    Returns 0 on success
  * or one of the FBOPEN_... return codes if something went wrong.
@@ -107,24 +107,24 @@ void fbputchar(char c, int row, int col)
         mask = 0x80;
         for (x = 0 ; x < FONT_WIDTH ; x++) {
             if (pixels & mask) {	
-	pixel[0] = 255; /* Red */
+				pixel[0] = 255; /* Red */
                 pixel[1] = 255; /* Green */
                 pixel[2] = 255; /* Blue */
                 pixel[3] = 0;
             } else {
-	pixel[0] = 0;
+				pixel[0] = 0;
                 pixel[1] = 0;
                 pixel[2] = 0;
                 pixel[3] = 0;
             }
             pixel += 4;
             if (pixels & mask) {
-	pixel[0] = 255; /* Red */
+				pixel[0] = 255; /* Red */
                 pixel[1] = 255; /* Green */
                 pixel[2] = 255; /* Blue */
                 pixel[3] = 0;
             } else {
-	pixel[0] = 0;
+				pixel[0] = 0;
                 pixel[1] = 0;
                 pixel[2] = 0;
                 pixel[3] = 0;

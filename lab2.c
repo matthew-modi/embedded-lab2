@@ -74,11 +74,11 @@ int main(){
 
     /* Draw rows of asterisks across the top and bottom of the screen */
     for (col = 0 ; col < 64 ; col++) {
-        fbputchar('*', 0, col);
+        fbputchar('*', 1, col);
         fbputchar('*', 23, col);
     }
 
-    fbputs("Hello CSEE 4840 World!", 4, 10);
+    fbputs("CSEE 4840 Chat:", 0, 10);
 
     /* Open the keyboard */
     if ( (keyboard = openkeyboard(&endpoint_address)) == NULL ) {
