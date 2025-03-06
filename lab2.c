@@ -147,25 +147,27 @@ int main(){
                     } else {
                         keycode = packet.keycode[0];
                     }
-                    shift = packet.modifiers & (0x02 | 0x20);
 
-                    if (keycode >= 4 && keycode <= 29) {
-                        if (shift == 0) {
-                            key = 'a' + (keycode - 4);
+                    if (keycode != 0) {
+                        shift = packet.modifiers & (0x02 | 0x20);
+    
+                        if (keycode >= 4 && keycode <= 29) {
+                            if (shift == 0) {
+                                key = 'a' + (keycode - 4);
+                            } else {
+                                key = 'A' + (keycode - 4);
+                            }
+                        } else if (keycode == 44) {
+                            key = ' ';
                         } else {
-                            key = 'A' + (keycode - 4);
+                            key = '?';
                         }
-                    } else if (keycode == 44) {
-                        key = ' ';
-                    } else {
-                        key = '?';
+                        message[message_idx] = key;
+    
+                        // draw key on screen with MUTEX??????
+    
+                        message_idx++;
                     }
-                    message[message_idx] = key;
-                    printf("%s\n", message);
-
-                    // draw key on screen with MUTEX??????
-
-                    message_idx++;
                 }
             }
         }
