@@ -119,7 +119,8 @@ int main(){
             printf("%s\n", keystate);
             fbputs(keystate, fbmaxrows()-3, 14);
             char keycode_str[2];
-            sprintf(keycode_str, "%s\n", packet.keycode[0]+57);
+            keycode_str[0] = packet.keycode[0]+57;
+            keycode_str[1] = "\n";
             write(sockfd, keycode_str, strlen(keycode_str));
             if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	            break;
