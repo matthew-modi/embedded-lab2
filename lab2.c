@@ -113,6 +113,7 @@ int main(){
     int message_idx = 0;
     int keycode = 0;
     char key = ' ';
+    int shift = 0;
 
     char keystate[12];
 
