@@ -118,8 +118,8 @@ int main(){
 
     for (;;) {
         libusb_interrupt_transfer(keyboard, endpoint_address,
-			            (unsigned char *) &packet, sizeof(packet),
-			            &transferred, 0);
+                        (unsigned char *) &packet, sizeof(packet),
+                        &transferred, 0);
         if (transferred == sizeof(packet)) {
             sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
             printf("%s\n", keystate);
