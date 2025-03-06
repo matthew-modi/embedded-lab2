@@ -229,7 +229,7 @@ int main(){
                             if (shift == 0) {
                                 key = "-=[]\\ ;'`,./"[keycode - 45];
                             } else {
-                                key = "_+{}| :\"<>?"[keycode - 45];
+                                key = "_+{}| :\"~<>?"[keycode - 45];
                             }
                         } else {
                             key = '?';
