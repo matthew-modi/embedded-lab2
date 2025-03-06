@@ -213,9 +213,9 @@ int main(){
                         }
 
                         // Type character while shifting everything else over and inserting key into first index
-                        for (int i = cursor_idx; i < message_len; i--) {
-                            // message[i+1] = message[i];
-                            // fbputchar(message[i+1], fbmaxrows() - 1 - INPUT_ROWS + (i+1 / fbmaxcols()), i+1 % fbmaxcols());
+                        for (int i = message_len; i > cursor_idx; i--) {
+                            message[i] = message[i-1];
+                            fbputchar(message[i], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
                         }
                         message[cursor_idx] = key;
                         fbputchar(key, fbmaxrows() - 1 - INPUT_ROWS + (cursor_idx / fbmaxcols()), cursor_idx % fbmaxcols());
