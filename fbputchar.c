@@ -38,7 +38,7 @@ void fbclear(void) {
 
 
 int fbmaxcols() {
-    return maxCols = fb_vinfo.xres / (FONT_WIDTH * 2);
+    return fb_vinfo.xres / (FONT_WIDTH * 2);
 }
 
 
