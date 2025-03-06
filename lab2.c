@@ -164,7 +164,7 @@ int main(){
                         }
                         message[message_idx] = key;
     
-                        // draw key on screen with MUTEX??????
+                        fbputchar(key, fbmaxrows() - 3 + (message_idx / fbmaxcols()), message_idx % fbmaxcols());
     
                         message_idx++;
                     }
