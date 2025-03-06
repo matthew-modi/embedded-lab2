@@ -124,7 +124,7 @@ int main(){
             sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
             printf("%s\n", keystate);
 
-            if (packet.keycode[0] == 0x28 || packet.keycode[1] == 0x28){ // Enter pressed
+            if (packet.keycode[0] == 40 || packet.keycode[1] == 40){ // Enter pressed
                 if (message_idx != 0) {
                     // Send message
                     message[message_idx] = '\n';
@@ -146,8 +146,21 @@ int main(){
                     } else {
                         keycode = packet.keycode[0];
                     }
-                    key = keycode;
+                    shift = packet.modifiers & (0x02 | 0x20);
+
+                    if (keycode >= 4 && keycode <= 29) {
+                        if (shift == 0) {
+                            key = 'a' + (keycode - 4);
+                        } else {
+                            key = 'A' + (keycode - 4);
+                        }
+                    } else if (keycode == 44) {
+                        key = ' ';
+                    } else {
+                        key = '?';
+                    }
                     message[message_idx] = key;
+                    printf("%s\n", message);
 
                     // draw key on screen with MUTEX??????
 
