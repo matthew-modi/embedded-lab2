@@ -266,6 +266,12 @@ void *network_thread_f(void *ignored){
             line[chunk] = '\0';
 
             if (receive_row >= RECEIVE_END) {
+                // Clear the entire receive region
+                for (int r = RECEIVE_START; r < RECEIVE_END; r++) {
+                    for (int c = 0; c < fbmaxcols(); c++) {
+                        fbputchar(' ', r, c);
+                    }
+                }
                 receive_row = RECEIVE_START;
             }
 
