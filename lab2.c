@@ -231,6 +231,8 @@ int main(){
                             } else {
                                 key = "_+{}| :\"~<>?"[keycode - 45];
                             }
+                        } else if (keycode == 44) {
+                            key = ' ';
                         } else {
                             key = '?';
                         }
