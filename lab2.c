@@ -191,6 +191,7 @@ int main(){
                             printf("message[message_len-1]: %c\n", message[message_len-1]);
                             fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + (message_len-1 / fbmaxcols()), message_len-1 % fbmaxcols());
                             message_len--;
+                            printf("got to end of forward delete\n");
                         }
                     } else if (keycode == 80) { // Left
                         if (cursor_idx > 0) {
