@@ -148,7 +148,7 @@ void *network_thread_f(void *ignored){
 
         while (pos < len) {
             int chunk = (len - pos > MAX_COLS ? MAX_COLS : len - pos);
-            strncpy(line, msg + pos, chunk);
+            strncpy(line, recvBuf + pos, chunk);
             line[chunk] = '\0';
 
             if (receive_row >= RECEIVE_END) {
