@@ -174,24 +174,17 @@ int main(){
                                 fbputchar(message[i], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
                             }
                             message[message_len-1] = ' ';
-                            fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + ((message_len-1) / fbmaxcols()), (message_len-1) % fbmaxcols());
+                            fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + (message_len-1 / fbmaxcols()), message_len-1 % fbmaxcols());
                             message_len--;
                         }
                     } else if (keycode == 76) { // Forward delete
                         if (cursor_idx < message_len) {
                             for (int i = cursor_idx; i < message_len - 1; i++) {
-                                printf("i: %d\n", i);
                                 message[i] = message[i + 1];
-                                printf("message[i]: %c\n", message[i]);
-                                printf("message[i+1]: %c\n", message[i+1]);
                                 fbputchar(message[i], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
                             }
-                            printf("message_len: %d\n", message_len);
-                            // message[message_len-1] = ' ';
-                            printf("message[message_len-1]: %c\n", message[message_len-1]);
                             fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + ((message_len-1) / fbmaxcols()), message_len-1 % fbmaxcols());
                             message_len--;
-                            printf("got to end of forward delete\n");
                         }
                     } else if (keycode == 80) { // Left
                         if (cursor_idx > 0) {
