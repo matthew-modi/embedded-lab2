@@ -174,7 +174,7 @@ int main(){
                                 fbputchar(message[i], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
                             }
                             message[message_len-1] = ' ';
-                            fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + (message_len-1 / fbmaxcols()), message_len-1 % fbmaxcols());
+                            fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + ((message_len-1) / fbmaxcols()), (message_len-1) % fbmaxcols());
                             message_len--;
                         }
                     } else if (keycode == 76) { // Forward delete
@@ -189,7 +189,7 @@ int main(){
                             printf("message_len: %d\n", message_len);
                             // message[message_len-1] = ' ';
                             printf("message[message_len-1]: %c\n", message[message_len-1]);
-                            // fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + (message_len-1 / fbmaxcols()), message_len-1 % fbmaxcols());
+                            fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + ((message_len-1) / fbmaxcols()), message_len-1 % fbmaxcols());
                             message_len--;
                             printf("got to end of forward delete\n");
                         }
