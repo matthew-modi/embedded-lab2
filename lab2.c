@@ -16,6 +16,8 @@
 #include <unistd.h>
 #include "usbkeyboard.h"
 #include <pthread.h>
+#include <time.h>
+
 
 /* Update SERVER_HOST to be the IP address of
  * the chat server you are connecting to
@@ -27,8 +29,10 @@
 #define BUFFER_SIZE 128
 #define INPUT_ROWS 5
 
+#define REPEAT_INTERVAL 0.2 // seconds
+#define REPEAT_DELAY 1 // seconds
+
 #define RECEIVE_START 2
-#define RECEIVE_END 20
 int receive_row = RECEIVE_START;
 
 /*
@@ -246,6 +250,7 @@ int main(){
 }
 
 void *network_thread_f(void *ignored){
+    int RECEIVE_END = fbmaxrows() - INPUT_ROWS - 2;
     char recvBuf[BUFFER_SIZE];
     int n;
     /* Receive data */
