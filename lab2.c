@@ -210,7 +210,7 @@ int main(){
                             key = '?';
                         }
                         // Type character while shifting everything else over and inserting key into first index
-                        for (int i = cursor_idx; i < message_len-1; i--) {
+                        for (int i = cursor_idx; i < message_len; i--) {
                             message[i+1] = message[i];
                             fbputchar(message[i+1], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
                         }
