@@ -131,7 +131,11 @@ int main(){
         if (transferred == sizeof(packet)) {
             sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
             printf("%s\n", keystate);
-
+            
+            // erase all cursor space 
+            for (int i = 0; i < MESSAGE_SIZE; i++) {
+                fberase_cursor(fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
+            }
             fbdraw_cursor(fbmaxrows() - 1 - INPUT_ROWS + (message_len / fbmaxcols()), message_len % fbmaxcols());
 
             if (packet.keycode[0] == 40 || packet.keycode[1] == 40){ // Enter pressed

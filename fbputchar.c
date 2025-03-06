@@ -64,6 +64,24 @@ void fbdraw_cursor(int row, int col)
     }
 }
 
+void fberase_cursor(int row, int col)
+{
+    int x, y;
+    unsigned char *base = framebuffer +
+        ((row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length) +
+        ((col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * (BITS_PER_PIXEL / 8));
+
+    for (y = FONT_HEIGHT * 2 - 2; y < FONT_HEIGHT * 2; y++) {
+        unsigned char *p = base + y * fb_finfo.line_length;
+        for (x = 0; x < FONT_WIDTH * 2; x++) {
+            p[x * 4 + 0] = 0;  /* Red */
+            p[x * 4 + 1] = 0;  /* Green */
+            p[x * 4 + 2] = 0;  /* Blue */
+            p[x * 4 + 3] = 0;
+        }
+    }
+}
+
 void fbgradient(){
     int x, y;
     unsigned char *base = framebuffer;
