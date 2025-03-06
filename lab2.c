@@ -188,7 +188,7 @@ int main(){
                             cursor_idx--;
                         }
                     } else if (keycode == 79) { // Right
-                        if (cursor_idx < message_len) {
+                        if (cursor_idx < message_len-1) {
                             cursor_idx++;
                         }
                     } else if (keycode == 82) { // Up
