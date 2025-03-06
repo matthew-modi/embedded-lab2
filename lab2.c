@@ -2,10 +2,7 @@
  *
  * CSEE 4840 Lab 2 for 2019
  *
- * Name/UNI:
- *      Matthew Modi (mem2382)
- *      Kamil Zajkowski (kmz2123)
- *      Rahul Pulidini (rp3254)
+ * Name/UNI: Please Changeto Yourname (pcy2301)
  */
 #include "fbputchar.h"
 #include <stdio.h>
@@ -26,11 +23,6 @@
 
 #define BUFFER_SIZE 128
 
-#define RECEIVE_START 8
-#define RECEIVE_END 19
-#define MAX_COLS 64
-int receive_row = RECEIVE_START;
-
 /*
  * References:
  *
@@ -47,7 +39,6 @@ uint8_t endpoint_address;
 
 pthread_t network_thread;
 void *network_thread_f(void *);
-void print_receive(const char *msg);
 
 int main()
 {
@@ -63,15 +54,6 @@ int main()
         fprintf(stderr, "Error: Could not open framebuffer: %d\n", err);
         exit(1);
     }
-
-    /* Clear the entire screen and setup the display layout
-     * We clear the entire screen, then draw a horizontal separator
-     * at rows 21 so that rows 21-23 can serve as the input region
-     * Finally, we display a cursor in the input region
-    */
-    fbclear();                // Clear the entire screen
-    fbdraw_hline(20, '-');    // Draw horizontal seperator at row 21
-    fbdraw_cursor(21, 0);     // Display a cursor in the input region (row 22, col 0)
 
     /* Draw rows of asterisks across the top and bottom of the screen */
     for (col = 0 ; col < 64 ; col++) {
@@ -144,36 +126,9 @@ void *network_thread_f(void *ignored)
     while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
         recvBuf[n] = '\0';
         printf("%s", recvBuf);
-        // fbputs(recvBuf, 8, 0);
-    	print_receive(recvBuf);
+        fbputs(recvBuf, 8, 0);
     }
 
     return NULL;
-}
-
-
-void print_receive(const char *msg)
-{
-	int len = strlen(msg);
-	int pos = 0;
-	char line[256];
-
-	while (pos < len) {
-		int chunk = (len - pos > MAX_COLS ? MAX_COLS : len - pos);
-		strncpy(line, msg + pos, chunk);
-		line[chunk] = '\0';
-
-
-
-
-if (receive_row >= RECEIVE_END) {
-			receive_row = RECEIVE_START;
-		}
-
-		fbputs(line, receive_row, 0);
-		receive_row++;
-
-		pos += chunk;
-	}
 }
 

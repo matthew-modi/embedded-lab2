@@ -19,7 +19,6 @@
 #include <sys/ioctl.h>
 
 #include <linux/fb.h>
-#include <string.h>
 
 #define FBDEV "/dev/fb0"
 
@@ -32,39 +31,6 @@ struct fb_fix_screeninfo fb_finfo;
 unsigned char *framebuffer;
 static unsigned char font[];
 
-/* our code */
-void fbclear(void) {
-    memset(framebuffer, 0, fb_finfo.smem_len);
-}
-
-
-void fbdraw_hline(int row, char ch)
-{
-    int maxCols = fb_vinfo.xres / (FONT_WIDTH * 2);
-    for (int col = 0; col < maxCols; col++) {
-        fbputchar(ch, row, col);
-    }
-
-}
-
-
-void fbdraw_cursor(int row, int col)
-{
-    int x, y;
-    unsigned char *base = framebuffer +
-        ((row * FONT_HEIGHT * 2 + fb_vinfo.yoffset) * fb_finfo.line_length) +
-        ((col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * (BITS_PER_PIXEL / 8));
-
-    for (y = FONT_HEIGHT * 2 - 2; y < FONT_HEIGHT * 2; y++) {
-        unsigned char *p = base + y * fb_finfo.line_length;
-        for (x = 0; x < FONT_WIDTH * 2; x++) {
-            p[x * 4 + 0] = 255;  /* Red */
-            p[x * 4 + 1] = 255;  /* Green */
-            p[x * 4 + 2] = 255;  /* Blue */
-            p[x * 4 + 3] = 0;
-        }
-    }
-}
 /*
  * Open the framebuffer to prepare it to be written to.    Returns 0 on success
  * or one of the FBOPEN_... return codes if something went wrong.
