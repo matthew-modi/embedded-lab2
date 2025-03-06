@@ -78,7 +78,7 @@ int main(){
         fbputchar('*', 23, col);
     }
 
-    fbputs("CSEE 4840 Chat:", 0, 20);
+    fbputs("CSEE 4840 Chat", 0, fbmaxcols() >= 14 ? (fbmaxcols()/2)-7 : 0);
 
     /* Open the keyboard */
     if ( (keyboard = openkeyboard(&endpoint_address)) == NULL ) {
