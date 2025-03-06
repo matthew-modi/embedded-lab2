@@ -37,13 +37,8 @@ void fbclear(void) {
 }
 
 
-void fbdraw_hline(int row, char ch)
-{
-    int maxCols = fb_vinfo.xres / (FONT_WIDTH * 2);
-    for (int col = 0; col < maxCols; col++) {
-        fbputchar(ch, row, col);
-    }
-
+int fbmaxcols() {
+    return maxCols = fb_vinfo.xres / (FONT_WIDTH * 2);
 }
 
 

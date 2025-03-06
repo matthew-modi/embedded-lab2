@@ -26,7 +26,7 @@
 
 #define BUFFER_SIZE 128
 
-#define RECEIVE_START 8
+#define RECEIVE_START 2
 #define RECEIVE_END 19
 #define MAX_COLS 64
 int receive_row = RECEIVE_START;
@@ -69,16 +69,16 @@ int main(){
      * Finally, we display a cursor in the input region
     */
     fbclear();                // Clear the entire screen
-    fbdraw_hline(20, '-');    // Draw horizontal seperator at row 21
     fbdraw_cursor(21, 0);     // Display a cursor in the input region (row 22, col 0)
 
     /* Draw rows of asterisks across the top and bottom of the screen */
-    for (col = 0 ; col < 64 ; col++) {
+    for (col = 0 ; col < fbmaxcols() ; col++) {
         fbputchar('*', 1, col);
+        fbputchar('-', 20, col); // Horizontal separator
         fbputchar('*', 23, col);
     }
 
-    fbputs("CSEE 4840 Chat:", 0, 10);
+    fbputs("CSEE 4840 Chat:", 0, 20);
 
     /* Open the keyboard */
     if ( (keyboard = openkeyboard(&endpoint_address)) == NULL ) {
