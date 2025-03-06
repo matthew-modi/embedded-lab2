@@ -71,8 +71,8 @@ void fbgradient(){
         unsigned char *p = base + y * fb_finfo.line_length;
         for (x = 0; x < fb_vinfo.xres; x++) {
             p[x * 4 + 0] = 255 * x / fb_vinfo.xres;  /* Red */
-            p[x * 4 + 1] = 255 * y / fb_vinfo.yres;  /* Green */
-            p[x * 4 + 2] = 255 * (x + y) / (fb_vinfo.xres + fb_vinfo.yres);  /* Blue */
+            p[x * 4 + 1] = 255 * y / (FONT_HEIGHT*2);  /* Green */
+            p[x * 4 + 2] = 255 * (x + (y/(FONT_HEIGHT*2))) / (fb_vinfo.xres + FONT_HEIGHT*2);  /* Blue */
             p[x * 4 + 3] = 0;
         }
     }
