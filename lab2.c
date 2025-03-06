@@ -203,11 +203,14 @@ int main(){
                         if (cursor_idx < message_len-1) {
                             cursor_idx++;
                         }
-                    } else if (keycode == 82) { // Up
+                    } else if (keycode == 82 // Up
+                            || keycode == 81 // Down
+                            || keycode == 43 // Tab
+                            || keycode == 41 // Escape
+                            || keycode == 83 // Num Lock
+                            ) {
                         // Do nothing
-                    } else if (keycode == 81) { // Down
-                        // Do nothing
-                    }else if (keycode != 0) { // Type character or question mark
+                    } else if (keycode != 0) { // Type character or question mark
                         shift = packet.modifiers & (0x02 | 0x20);
     
                         if (keycode >= 4 && keycode <= 29) {
@@ -216,6 +219,18 @@ int main(){
                             } else {
                                 key = 'A' + (keycode - 4);
                             }
+                        } else if (keycode >= 30 && keycode <= 39) {
+                            if (shift == 0) {
+                                key = '0' + (keycode - 30);
+                            } else {
+                                key = ")!@#$%^&*("[keycode - 30];
+                            }
+                        } else if (keycode == ) {
+                            key = ' ';
+                        } else if (keycode == ) {
+                            key = ' ';
+                        } else if (keycode == ) {
+                            key = ' ';
                         } else if (keycode == 44) {
                             key = ' ';
                         } else {
