@@ -49,8 +49,7 @@ pthread_t network_thread;
 void *network_thread_f(void *);
 void print_receive(const char *msg);
 
-int main()
-{
+int main(){
     int err, col;
 
     struct sockaddr_in serv_addr;
@@ -136,44 +135,33 @@ int main()
     return 0;
 }
 
-void *network_thread_f(void *ignored)
-{
+void *network_thread_f(void *ignored){
     char recvBuf[BUFFER_SIZE];
     int n;
     /* Receive data */
     while ( (n = read(sockfd, &recvBuf, BUFFER_SIZE - 1)) > 0 ) {
         recvBuf[n] = '\0';
         printf("%s", recvBuf);
-        // fbputs(recvBuf, 8, 0);
-    	print_receive(recvBuf);
+        int len = strlen(msg);
+        int pos = 0;
+        char line[256];
+
+        while (pos < len) {
+            int chunk = (len - pos > MAX_COLS ? MAX_COLS : len - pos);
+            strncpy(line, msg + pos, chunk);
+            line[chunk] = '\0';
+
+            if (receive_row >= RECEIVE_END) {
+                receive_row = RECEIVE_START;
+            }
+
+            fbputs(line, receive_row, 0);
+            receive_row++;
+
+            pos += chunk;
+        }
     }
 
     return NULL;
-}
-
-
-void print_receive(const char *msg)
-{
-	int len = strlen(msg);
-	int pos = 0;
-	char line[256];
-
-	while (pos < len) {
-		int chunk = (len - pos > MAX_COLS ? MAX_COLS : len - pos);
-		strncpy(line, msg + pos, chunk);
-		line[chunk] = '\0';
-
-
-
-
-if (receive_row >= RECEIVE_END) {
-			receive_row = RECEIVE_START;
-		}
-
-		fbputs(line, receive_row, 0);
-		receive_row++;
-
-		pos += chunk;
-	}
 }
 
