@@ -25,6 +25,7 @@
 #define SERVER_PORT 42000
 
 #define BUFFER_SIZE 128
+#define INPUT_ROWS 2
 
 #define RECEIVE_START 2
 #define RECEIVE_END 20
@@ -67,12 +68,11 @@ int main(){
      * Finally, we display a cursor in the input region
     */
     fbclear();                // Clear the entire screen
-    fbdraw_cursor(21, 0);     // Display a cursor in the input region (row 22, col 0)
 
     /* Draw rows of asterisks across the top and bottom of the screen */
     for (col = 0 ; col < fbmaxcols() ; col++) {
         fbputchar('*', 1, col);
-        fbputchar('-', fbmaxrows()-4, col); // Horizontal separator
+        fbputchar('-', fbmaxrows()-2-INPUT_ROWS, col); // Horizontal separator
         fbputchar('*', fbmaxrows()-1, col);
     }
 
@@ -109,7 +109,9 @@ int main(){
     pthread_create(&network_thread, NULL, network_thread_f, NULL);
 
     /* Look for and handle keypresses */
-    char message[BUFFER_SIZE] = "";
+    int MESSAGE_SIZE = INPUT_ROWS * fbmaxcols();
+
+    char message[MESSAGE_SIZE] = "";
     int message_idx = 0;
     int keycode = 0;
     char key = ' ';
@@ -125,6 +127,8 @@ int main(){
             sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
             printf("%s\n", keystate);
 
+            fbdraw_cursor(fbmaxrows() - 1 - INPUT_ROWS + (message_idx / fbmaxcols()), message_idx % fbmaxcols());
+
             if (packet.keycode[0] == 40 || packet.keycode[1] == 40){ // Enter pressed
                 if (message_idx != 0) {
                     // Send message
@@ -135,13 +139,17 @@ int main(){
                     memset(message, 0, sizeof(message));
 
                     // Clear Screen
-                    // TODO
+                    for (int i = 0; i < INPUT_ROWS; i++) {
+                        for (int j = 0; j < fbmaxcols(); j++) {
+                            fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + i, j);
+                        }
+                    }
 
                     // Reset message index
                     message_idx = 0;
                 }
             } else if (packet.keycode[0] == 0x00 || packet.keycode[1] == 0x00) { // Single character being pressed
-                if (message_idx < BUFFER_SIZE - 1) {
+                if (message_idx < MESSAGE_SIZE - 1) {
                     if (packet.keycode[0] == 0x00) {
                         keycode = packet.keycode[1];
                     } else {
@@ -164,7 +172,7 @@ int main(){
                         }
                         message[message_idx] = key;
     
-                        fbputchar(key, fbmaxrows() - 3 + (message_idx / fbmaxcols()), message_idx % fbmaxcols());
+                        fbputchar(key, fbmaxrows() - 1 - INPUT_ROWS + (message_idx / fbmaxcols()), message_idx % fbmaxcols());
     
                         message_idx++;
                     }
