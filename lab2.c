@@ -225,14 +225,12 @@ int main(){
                             } else {
                                 key = ")!@#$%^&*("[keycode - 30];
                             }
-                        } else if (keycode == ) {
-                            key = ' ';
-                        } else if (keycode == ) {
-                            key = ' ';
-                        } else if (keycode == ) {
-                            key = ' ';
-                        } else if (keycode == 44) {
-                            key = ' ';
+                        } else if (keycode >= 45 && keycode <= 56) { // Special Characters
+                            if (shift == 0) {
+                                key = "-=[]\\ ;'`,./"[keycode - 45];
+                            } else {
+                                key = "_+{}| :\"<>?"[keycode - 45];
+                            }
                         } else {
                             key = '?';
                         }
