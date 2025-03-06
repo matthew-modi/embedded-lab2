@@ -132,7 +132,7 @@ int main(){
             sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
             printf("%s\n", keystate);
 
-            // fbdraw_cursor(fbmaxrows() - 1 - INPUT_ROWS + (message_len / fbmaxcols()), message_len % fbmaxcols());
+            fbdraw_cursor(fbmaxrows() - 1 - INPUT_ROWS + (message_len / fbmaxcols()), message_len % fbmaxcols());
 
             if (packet.keycode[0] == 40 || packet.keycode[1] == 40){ // Enter pressed
                 if (message_len != 0) {
@@ -166,7 +166,7 @@ int main(){
                         if (cursor_idx > 0) {
                             message_len--;
                             cursor_idx--;
-                            for (int i = cursor_idx; i < message_len; i++) {
+                            for (int i = cursor_idx; i < message_len - 1; i++) {
                                 message[i] = message[i + 1];
                                 fbputchar(message[i], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
                             }
@@ -179,17 +179,17 @@ int main(){
                             }
                             message_len--;
                         }
-                    } else if (keycode == 81) { // Left
+                    } else if (keycode == 80) { // Left
                         if (cursor_idx > 0) {
                             cursor_idx--;
                         }
-                    } else if (keycode == 83) { // Right
+                    } else if (keycode == 79) { // Right
                         if (cursor_idx < message_len) {
                             cursor_idx++;
                         }
                     } else if (keycode == 82) { // Up
                         // Do nothing
-                    } else if (keycode == 84) { // Down
+                    } else if (keycode == 81) { // Down
                         // Do nothing
                     }else if (keycode != 0) { // Type character or question mark
                         shift = packet.modifiers & (0x02 | 0x20);
