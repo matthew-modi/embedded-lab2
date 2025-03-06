@@ -110,8 +110,11 @@ int main(){
 
     /* Look for and handle keypresses */
     int MESSAGE_SIZE = INPUT_ROWS * fbmaxcols();
-
-    char message[MESSAGE_SIZE] = "";
+    char* message = (char*) malloc(MESSAGE_SIZE * sizeof(char));
+    if (!message) {
+        fprintf(stderr, "Error: Could not allocate memory for message buffer\n");
+        exit(1);
+    }
     int message_idx = 0;
     int keycode = 0;
     char key = ' ';
@@ -180,6 +183,7 @@ int main(){
             }
         }
     }
+    free(message);
 
     /* Terminate the network thread */
     pthread_cancel(network_thread);
