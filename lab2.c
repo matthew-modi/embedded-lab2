@@ -109,10 +109,10 @@ int main(){
     pthread_create(&network_thread, NULL, network_thread_f, NULL);
 
     /* Look for and handle keypresses */
-    char message[MAX_BUFFER_SIZE] = "";
+    char message[BUFFER_SIZE] = "";
     int message_idx = 0;
     int keycode = 0;
-    char key = '';
+    char key = ' ';
 
     char keystate[12];
 
@@ -128,7 +128,7 @@ int main(){
                 if (message_idx != 0) {
                     // Send message
                     message[message_idx] = '\n';
-                    write(sockfd, message, strlen(message_idx+1));
+                    write(sockfd, message, message_idx+1);
 
                     // Clear buffer
                     memset(message, 0, sizeof(message));
@@ -140,7 +140,7 @@ int main(){
                     message_idx = 0;
                 }
             } else if (packet.keycode[0] == 0x00 || packet.keycode[1] == 0x00) { // Single character being pressed
-                if (message_idx < MAX_BUFFER_SIZE-1) {
+                if (message_idx < BUFFER_SIZE - 1) {
                     if (packet.keycode[0] == 0x00) {
                         keycode = packet.keycode[1];
                     } else {
