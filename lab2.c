@@ -139,7 +139,7 @@ int main(){
                     write(sockfd, message, message_idx+1);
 
                     // Clear buffer
-                    memset(message, 0, sizeof(message));
+                    memset(message, 0, MESSAGE_SIZE);
 
                     // Clear Screen
                     for (int i = 0; i < INPUT_ROWS; i++) {
