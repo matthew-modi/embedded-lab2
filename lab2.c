@@ -168,12 +168,14 @@ int main(){
 
                     if (keycode == 42) { // Backspace
                         if (cursor_idx > 0) {
-                            message_len--;
                             cursor_idx--;
                             for (int i = cursor_idx; i < message_len - 1; i++) {
                                 message[i] = message[i + 1];
                                 fbputchar(message[i], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
                             }
+                            message[message_len-1] = ' ';
+                            fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + (message_len-1 / fbmaxcols()), message_len-1 % fbmaxcols());
+                            message_len--;
                         }
                     } else if (keycode == 76) { // Forward delete
                         if (cursor_idx < message_len) {
@@ -181,6 +183,8 @@ int main(){
                                 message[i] = message[i + 1];
                                 fbputchar(message[i], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
                             }
+                            message[message_len-1] = ' ';
+                            fbputchar(' ', fbmaxrows() - 1 - INPUT_ROWS + (message_len-1 / fbmaxcols()), message_len-1 % fbmaxcols());
                             message_len--;
                         }
                     } else if (keycode == 80) { // Left
@@ -209,6 +213,7 @@ int main(){
                         } else {
                             key = '?';
                         }
+
                         // Type character while shifting everything else over and inserting key into first index
                         for (int i = cursor_idx; i < message_len; i--) {
                             message[i+1] = message[i];
