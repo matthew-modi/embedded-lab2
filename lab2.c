@@ -73,7 +73,7 @@ int main(){
     /* Draw rows of asterisks across the top and bottom of the screen */
     for (col = 0 ; col < fbmaxcols() ; col++) {
         fbputchar('*', 1, col);
-        fbputchar('-', fbmaxrows()-3, col); // Horizontal separator
+        fbputchar('-', fbmaxrows()-4, col); // Horizontal separator
         fbputchar('*', fbmaxrows()-1, col);
     }
 
@@ -117,7 +117,10 @@ int main(){
         if (transferred == sizeof(packet)) {
             sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
             printf("%s\n", keystate);
-            fbputs(keystate, fbmaxrows()-2, 14);
+            fbputs(keystate, fbmaxrows()-3, 14);
+            char keycode_str[2];
+            sprintf(keycode_str, "%s\n", packet.keycode[0]+57);
+            write(sockfd, keycode_str, strlen(keycode_str));
             if (packet.keycode[0] == 0x29) { /* ESC pressed? */
 	            break;
             }
