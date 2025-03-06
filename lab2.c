@@ -115,7 +115,8 @@ int main(){
         fprintf(stderr, "Error: Could not allocate memory for message buffer\n");
         exit(1);
     }
-    int message_idx = 0;
+    int message_len = 0;
+    int cursor_idx = 0;
     int keycode = 0;
     char key = ' ';
     int shift = 0;
@@ -130,13 +131,13 @@ int main(){
             sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
             printf("%s\n", keystate);
 
-            fbdraw_cursor(fbmaxrows() - 1 - INPUT_ROWS + (message_idx / fbmaxcols()), message_idx % fbmaxcols());
+            fbdraw_cursor(fbmaxrows() - 1 - INPUT_ROWS + (message_len / fbmaxcols()), message_len % fbmaxcols());
 
             if (packet.keycode[0] == 40 || packet.keycode[1] == 40){ // Enter pressed
-                if (message_idx != 0) {
+                if (message_len != 0) {
                     // Send message
-                    message[message_idx] = '\n';
-                    write(sockfd, message, message_idx+1);
+                    message[message_len] = '\n';
+                    write(sockfd, message, message_len+1);
 
                     // Clear buffer
                     memset(message, 0, MESSAGE_SIZE);
@@ -149,17 +150,47 @@ int main(){
                     }
 
                     // Reset message index
-                    message_idx = 0;
+                    message_len = 0;
+                    cursor_idx = 0;
                 }
             } else if (packet.keycode[0] == 0x00 || packet.keycode[1] == 0x00) { // Single character being pressed
-                if (message_idx < MESSAGE_SIZE - 1) {
-                    if (packet.keycode[0] == 0x00) {
+                if (message_len < MESSAGE_SIZE - 1) { // Still room in the text box
+                    if (packet.keycode[0] == 0x00) { // Single character at a time TODO make this work for double presses
                         keycode = packet.keycode[1];
                     } else {
                         keycode = packet.keycode[0];
                     }
 
-                    if (keycode != 0) {
+                    if (keycode == 42) { // Backspace
+                        if (cursor_idx > 0) {
+                            message_len--;
+                            cursor_idx--;
+                            for (int i = cursor_idx; i < message_len; i++) {
+                                message[i] = message[i + 1];
+                                fbputchar(message[i], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
+                            }
+                        }
+                    } else if (keycode == 76) { // Forward delete
+                        if (cursor_idx < message_len) {
+                            for (int i = cursor_idx; i < message_len - 1; i++) {
+                                message[i] = message[i + 1];
+                                fbputchar(message[i], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
+                            }
+                            message_len--;
+                        }
+                    } else if (keycode == 81) { // Left
+                        if (cursor_idx > 0) {
+                            cursor_idx--;
+                        }
+                    } else if (keycode == 83) { // Right
+                        if (cursor_idx < message_len) {
+                            cursor_idx++;
+                        }
+                    } else if (keycode == 82) { // Up
+                        // Do nothing
+                    } else if (keycode == 84) { // Down
+                        // Do nothing
+                    }else if (keycode != 0) { // Type character or question mark
                         shift = packet.modifiers & (0x02 | 0x20);
     
                         if (keycode >= 4 && keycode <= 29) {
@@ -173,11 +204,15 @@ int main(){
                         } else {
                             key = '?';
                         }
-                        message[message_idx] = key;
+                        // Type character while shifting everything else over and inserting key into first index
+                        for (int i = message_len; i > cursor_idx; i--) {
+                            message[i] = message[i - 1];
+                            fbputchar(message[i], fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
+                        }
+                        message[cursor_idx] = key;
     
-                        fbputchar(key, fbmaxrows() - 1 - INPUT_ROWS + (message_idx / fbmaxcols()), message_idx % fbmaxcols());
-    
-                        message_idx++;
+                        message_len++;
+                        cursor_idx++;
                     }
                 }
             }
