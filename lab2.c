@@ -136,7 +136,7 @@ int main(){
             for (int i = 0; i < MESSAGE_SIZE; i++) {
                 fberase_cursor(fbmaxrows() - 1 - INPUT_ROWS + (i / fbmaxcols()), i % fbmaxcols());
             }
-            fbdraw_cursor(fbmaxrows() - 1 - INPUT_ROWS + (message_len / fbmaxcols()), message_len % fbmaxcols());
+            fbdraw_cursor(fbmaxrows() - 1 - INPUT_ROWS + (cursor_idx / fbmaxcols()), cursor_idx % fbmaxcols());
 
             if (packet.keycode[0] == 40 || packet.keycode[1] == 40){ // Enter pressed
                 if (message_len != 0) {
