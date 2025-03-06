@@ -18,7 +18,6 @@
 #include <pthread.h>
 #include <time.h>
 
-
 /* Update SERVER_HOST to be the IP address of
  * the chat server you are connecting to
  */
