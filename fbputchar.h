@@ -13,6 +13,7 @@ extern void fbputs(const char *, int, int);
 
 extern void fbclear(void);
 extern int fbmaxcols();
+extern int fbmaxrows();
 extern void fbdraw_cursor(int row, int col);
 
 #endif

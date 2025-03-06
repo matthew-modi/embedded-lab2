@@ -41,6 +41,10 @@ int fbmaxcols() {
     return fb_vinfo.xres / (FONT_WIDTH * 2);
 }
 
+int fbmaxrows() {
+    return fb_vinfo.yres / (FONT_HEIGHT * 2);
+}
+
 
 void fbdraw_cursor(int row, int col)
 {

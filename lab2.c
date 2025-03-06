@@ -27,8 +27,7 @@
 #define BUFFER_SIZE 128
 
 #define RECEIVE_START 2
-#define RECEIVE_END 19
-#define MAX_COLS 64
+#define RECEIVE_END 20
 int receive_row = RECEIVE_START;
 
 /*
@@ -74,8 +73,8 @@ int main(){
     /* Draw rows of asterisks across the top and bottom of the screen */
     for (col = 0 ; col < fbmaxcols() ; col++) {
         fbputchar('*', 1, col);
-        fbputchar('-', 20, col); // Horizontal separator
-        fbputchar('*', 23, col);
+        fbputchar('-', fbmaxrows()-3, col); // Horizontal separator
+        fbputchar('*', fbmaxrows()-1, col);
     }
 
     fbputs("CSEE 4840 Chat", 0, fbmaxcols() >= 14 ? (fbmaxcols()/2)-7 : 0);
@@ -116,12 +115,11 @@ int main(){
 			            (unsigned char *) &packet, sizeof(packet),
 			            &transferred, 0);
         if (transferred == sizeof(packet)) {
-            sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0],
-	            packet.keycode[1]);
+            sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
             printf("%s\n", keystate);
-            fbputs(keystate, 6, 0);
+            fbputs(keystate, fbmaxrows()-2, 14);
             if (packet.keycode[0] == 0x29) { /* ESC pressed? */
-	break;
+	            break;
             }
         }
     }
@@ -147,7 +145,7 @@ void *network_thread_f(void *ignored){
         char line[256];
 
         while (pos < len) {
-            int chunk = (len - pos > MAX_COLS ? MAX_COLS : len - pos);
+            int chunk = (len - pos > fbmaxcols() ? fbmaxcols() : len - pos);
             strncpy(line, recvBuf + pos, chunk);
             line[chunk] = '\0';
 
