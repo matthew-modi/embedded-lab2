@@ -47,7 +47,6 @@ uint8_t endpoint_address;
 
 pthread_t network_thread;
 void *network_thread_f(void *);
-void print_receive(const char *msg);
 
 int main(){
     int err, col;
@@ -216,7 +215,7 @@ int main(){
                         // Type character while shifting everything else over and inserting key into first index
                         for (int i = cursor_idx; i < message_len; i--) {
                             message[i+1] = message[i];
-                            fbputchar(message[i+1], fbmaxrows() - 1 - INPUT_ROWS + (i+1 / fbmaxcols()), i+1 % fbmaxcols());
+                            // fbputchar(message[i+1], fbmaxrows() - 1 - INPUT_ROWS + (i+1 / fbmaxcols()), i+1 % fbmaxcols());
                         }
                         message[cursor_idx] = key;
                         fbputchar(key, fbmaxrows() - 1 - INPUT_ROWS + (cursor_idx / fbmaxcols()), cursor_idx % fbmaxcols());
