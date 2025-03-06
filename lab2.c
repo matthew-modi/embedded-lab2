@@ -110,21 +110,51 @@ int main(){
     pthread_create(&network_thread, NULL, network_thread_f, NULL);
 
     /* Look for and handle keypresses */
+    char message[MAX_BUFFER_SIZE] = "";
+    int message_idx = 0;
+    int keycode = 0;
+    char key = '';
+
     for (;;) {
         libusb_interrupt_transfer(keyboard, endpoint_address,
 			            (unsigned char *) &packet, sizeof(packet),
 			            &transferred, 0);
         if (transferred == sizeof(packet)) {
-            sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
-            printf("%s\n", keystate);
-            fbputs(keystate, fbmaxrows()-3, 14);
-            char keycode_str[2];
-            keycode_str[0] = packet.keycode[0]+57;
-            keycode_str[1] = '\n';
-            write(sockfd, keycode_str, strlen(keycode_str));
-            if (packet.keycode[0] == 0x29) { /* ESC pressed? */
-	            break;
-            }
+            // sprintf(keystate, "%02x %02x %02x", packet.modifiers, packet.keycode[0], packet.keycode[1]);
+            // printf("%s\n", keystate);
+
+            if (packet.keycode[0] == 0x28 || packet.keycode[1] == 0x28){ // Enter pressed
+                if (message_idx != 0) {
+                    // Send message
+                    message[message_idx] = '\n';
+                    write(sockfd, message, strlen(message_idx+1));
+
+                    // Clear buffer
+                    memset(message, 0, sizeof(message));
+
+                    // Clear Screen
+                    // TODO
+
+                    // Reset message index
+                    message_idx = 0;
+                }
+            } else if (packet.keycode[0] == 0x00 || packet.keycode[1] == 0x00) { // Single character being pressed
+                if (message_idx < MAX_BUFFER_SIZE-1) {
+                    if (packet.keycode[0] == 0x00) {
+                        keycode = packet.keycode[1];
+                    } else {
+                        keycode = packet.keycode[0];
+                    }
+                    key = keycode;
+                    message[message_idx] = key;
+
+                    // draw key on screen with MUTEX??????
+
+                    message_idx++;
+                }
+            } else {
+                message[message_idx] = '\n';
+                write(sockfd, keycode_str, strlen(keycode_str));
         }
     }
 
