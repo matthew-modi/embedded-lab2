@@ -64,6 +64,20 @@ void fbdraw_cursor(int row, int col)
     }
 }
 
+void fbgradient(){
+    int x, y;
+    unsigned char *base = framebuffer;
+    for (y = 0; y < FONT_HEIGHT*2; y++) {
+        unsigned char *p = base + y * fb_finfo.line_length;
+        for (x = 0; x < fb_vinfo.xres; x++) {
+            p[x * 4 + 0] = 255 * x / fb_vinfo.xres;  /* Red */
+            p[x * 4 + 1] = 255 * y / fb_vinfo.yres;  /* Green */
+            p[x * 4 + 2] = 255 * (x + y) / (fb_vinfo.xres + fb_vinfo.yres);  /* Blue */
+            p[x * 4 + 3] = 0;
+        }
+    }
+}
+
 /*
  * Open the framebuffer to prepare it to be written to.    Returns 0 on success
  * or one of the FBOPEN_... return codes if something went wrong.

@@ -68,6 +68,7 @@ int main(){
      * Finally, we display a cursor in the input region
     */
     fbclear();                // Clear the entire screen
+    fbgradient();             // Draw a gradient background
 
     /* Draw rows of asterisks across the top and bottom of the screen */
     for (col = 0 ; col < fbmaxcols() ; col++) {
